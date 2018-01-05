@@ -1,0 +1,29 @@
+<div class="well">
+  <h3>Formulaire de ... </h3>
+  <form (ngSubmit)="save()">
+    <div class="form-group">
+      <label for='titre'>Titre</label>
+      <input type="text" id="titre" name="titre" class="form-control" [(ngModel)]="editedManga.titre"/>
+    </div>
+
+    <div class="form-group">
+      <label for='auteur'>auteur</label>
+      <input type="text" id="auteur" name="auteur" class="form-control" [(ngModel)]="editedManga.auteur"/>
+    </div>
+
+    <div class="form-group">
+      <label for='genre'>genre</label>
+      <input type="text" id="genre" name="genre" class="form-control" [(ngModel)]="editedManga.genre"/>
+    </div>
+
+    <div class="form-group">
+      <label for='dateParution'>date Parution</label>
+      <input type="text" id="dateParution" name="dateParution" class="form-control" [ngModel]="editedManga.dateParution | date:'yyyy-MM-dd'" (ngModelChange)="editedManga.dateParution = $event" />
+    </div>
+    <div class="form-group">
+      <label for='rating'>rating</label>
+      <input type="text" id="rating" name="rating" class="form-control" [(ngModel)]="editedManga.rating"/>
+    </div>
+    <input type="submit" value="Creer" class="btn btn-primary"/>
+  </form>
+</div>

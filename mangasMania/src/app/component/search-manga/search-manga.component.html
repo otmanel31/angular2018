@@ -1,0 +1,7 @@
+<div class="form-group">
+  <form>
+    <label for="searchTerm">Search Title</label>
+    <!--<input type="text" class="form-control" name="searchTerm" id="searchTerm" [value]="searchTerm" (ngModelChange)="changeTerm(searchTerm)" />-->
+    <input type="text" class="form-control" name="searchTerm" id="searchTerm" [ngModel]="searchTerm" (ngModelChange)="changeTerm($event)" />
+  </form>
+</div>

@@ -1,0 +1,38 @@
+<div class="well">
+  <a class="btn btn-primary" routerLink="/edit/0">Creer une nouvelle todo</a>
+  <tabset>
+    <tab heading="libelle"><input type="text" class="form-control" id="libelle" name="libelle" [ngModel]="searchTerm" (ngModelChange)="search($event, 'libelle')" placeholder="Recherche par libelle"/></tab>
+    <tab heading="priorite"><input type="text" class="form-control" id="priorite" name="priorite" [ngModel]="searchTerm" (ngModelChange)="search($event, 'priorite')" placeholder="Recherche par priorité"/></tab>
+    <tab heading="date limite"><input type="text" class="form-control" id="dateLimite" name="dateLimite" [ngModel]="searchTerm" (ngModelChange)="search($event, 'dateLimite')" placeholder="Recherche par date limite"/></tab>
+  </tabset>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>libelle</th>
+        <th>description</th>
+        <th>priorité</th>
+        <th>date de creation</th>
+        <th>date limite</th>
+        <th>contexte</th>
+        <th>terminé</th>
+        <th>actions</th>
+      </tr>
+     
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of todos | async">
+        <td>{{t.libelle}}</td>
+        <td>{{t.description}}</td>
+        <td>{{t.priorite}}</td>
+        <td>{{t.dateCreation | date}}</td>
+        <td>{{t.dateLimite | date}}</td>
+        <td>{{t.contexte}}</td>
+        <td>{{t.finished}}</td>
+        <td>
+          <a class="btn btn-success" routerLink='/edit/{{t.id}}'>Editer</a>
+          <button class="btn btn-danger" (click)="deleteTodo(t.id)" >Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

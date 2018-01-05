@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="well">
+    <h3>Formulaire de {{typeFormulaire}} </h3>
+    <form (ngSubmit)="save()">
+      <div class="form-group">
+        <label for='libelle'>libelle: </label>
+        <input type="text" id="libelle" name="libelle" class="form-control" [(ngModel)]="editedTodo.libelle"/>
+      </div>
+  
+      <div class="form-group">
+        <label for='description'>description: </label>
+        <input type="text" id="description" name="description" class="form-control" [(ngModel)]="editedTodo.description"/>
+      </div>
+  
+      <div class="form-group">
+        <label for='priorite'>priorite</label>
+        <input type="text" id="priorite" name="priorite" class="form-control" [(ngModel)]="editedTodo.priorite"/>
+      </div>
+  
+      <div class="form-group">
+        <label for='dateCreation'>date de creation </label>
+        <input type="text" id="dateCreation" name="dateCreation" class="form-control" [ngModel]="editedTodo.dateCreation | date:'yyyy-MM-dd'" (ngModelChange)="editedTodo.dateCreation = $event" />
+      </div>
+
+      <div class="form-group">
+        <label for='dateLimite'>date limite </label>
+        <input type="text" id="dateLimite" name="dateLimite" class="form-control" [ngModel]="editedTodo.dateLimite | date:'yyyy-MM-dd'" (ngModelChange)="editedTodo.dateLimite = $event" />
+      </div>
+
+      <div class="form-group">
+        <label for='contexte'>contexte</label>
+        <input type="text" id="contexte" name="contexte" class="form-control" [(ngModel)]="editedTodo.contexte"/>
+      </div>
+      <div class="form-group">
+        <label for='finished'>finished</label>
+        <input type="text" id="finished" name="finished" class="form-control" [(ngModel)]="editedTodo.finished"/>
+      </div>
+      <input type="submit" value="Creer" class="btn btn-primary"/>
+    </form>
+  </div>
+  
+</div>
