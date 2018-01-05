@@ -1,5 +1,7 @@
 <app-search-manga></app-search-manga>
-  <a class="btn btn-primary" routerLink="/edit/0">Creer un nouveau manga</a>
+  <a class="btn btn-primary" routerLink="/edit/0">Creer un nouveau manga</a><br/>
+  <pagination [boundaryLinks]="true" [totalItems]="totalItems" [ngModel]="currentPage" [itemsPerPage]="3" class="pagination-sm"
+      previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" (pageChanged)="pageChanged($event)"></pagination>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -22,3 +24,5 @@
       </tr>
     </tbody>
   </table>
+  <pagination [boundaryLinks]="true" [totalItems]="totalItems" [(ngModel)]="currentPage" [itemsPerPage]="3" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>

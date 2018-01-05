@@ -10,6 +10,8 @@ import { SearchMangaComponent } from './component/search-manga/search-manga.comp
 import { ListeMangaComponent } from './component/liste-manga/liste-manga.component';
 import { EditMangaComponent } from './component/edit-manga/edit-manga.component';
 
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,7 @@ import { EditMangaComponent } from './component/edit-manga/edit-manga.component'
     EditMangaComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule, 
+    BrowserModule, HttpClientModule, FormsModule, PaginationModule.forRoot(),
     RouterModule.forRoot([
       {path:'liste', component:ListeMangaComponent},
       {path:"edit/:id", component:EditMangaComponent},
