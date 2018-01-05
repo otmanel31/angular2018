@@ -10,7 +10,8 @@ import { TodoServicesService } from '../../services/todo-services.service';
 })
 export class EditTodoComponent implements OnInit {
 
-  typeFormulaire:string;
+  typeFormulaire:string = "de creation ";
+  nameBtn:string = "creer";
 
   public editedTodo: Todo;
 
@@ -22,7 +23,11 @@ export class EditTodoComponent implements OnInit {
     let id;
     this.activatedRoute.params.subscribe(param=>{
       id = param.id;
-      if (id != 0) this.todoService.findById(id).then(t=> this.editedTodo = t).catch(err=> console.error(err));
+      if (id != 0){
+        this.typeFormulaire = " d' édition"
+        this.nameBtn = "editer"
+        this.todoService.findById(id).then(t=> this.editedTodo = t).catch(err=> console.error(err));
+      }
     });
   }
 

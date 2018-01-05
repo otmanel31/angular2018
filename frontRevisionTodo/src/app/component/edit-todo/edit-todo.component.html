@@ -1,6 +1,6 @@
 <div class="container">
   <div class="well">
-    <h3>Formulaire de {{typeFormulaire}} </h3>
+    <h3>Formulaire {{typeFormulaire}} </h3>
     <form (ngSubmit)="save()">
       <div class="form-group">
         <label for='libelle'>libelle: </label>
@@ -35,7 +35,7 @@
         <label for='finished'>finished</label>
         <input type="text" id="finished" name="finished" class="form-control" [(ngModel)]="editedTodo.finished"/>
       </div>
-      <input type="submit" value="Creer" class="btn btn-primary"/>
+      <input type="submit" value="{{nameBtn}}" class="btn btn-primary"/>
     </form>
   </div>
   
