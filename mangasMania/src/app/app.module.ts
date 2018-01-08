@@ -11,6 +11,7 @@ import { ListeMangaComponent } from './component/liste-manga/liste-manga.compone
 import { EditMangaComponent } from './component/edit-manga/edit-manga.component';
 
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     EditMangaComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule, PaginationModule.forRoot(),
+    BrowserModule, HttpClientModule, FormsModule, PaginationModule.forRoot(),BsDropdownModule.forRoot(),
     RouterModule.forRoot([
       {path:'liste', component:ListeMangaComponent},
       {path:"edit/:id", component:EditMangaComponent},
