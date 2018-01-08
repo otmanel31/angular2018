@@ -11,6 +11,8 @@ import { ListeTodoComponent } from './component/liste-todo/liste-todo.component'
 import { EditTodoComponent } from './component/edit-todo/edit-todo.component';
 
 import { TabsModule } from "ngx-bootstrap";
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { TabsModule } from "ngx-bootstrap";
     EditTodoComponent,
   ],
   imports: [
-  BrowserModule, FormsModule, HttpClientModule, TabsModule.forRoot(),
+  BrowserModule, FormsModule, HttpClientModule, TabsModule.forRoot(), 
+    PaginationModule.forRoot(),BsDropdownModule.forRoot(),
     RouterModule.forRoot([
       {path:"liste", component:ListeTodoComponent},
       {path:"edit/:id", component:EditTodoComponent},

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Todo } from '../../metier/todo';
 import { Router, ActivatedRoute } from "@angular/router";
 import { TodoServicesService } from '../../services/todo-services.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-todo',
@@ -31,7 +32,9 @@ export class EditTodoComponent implements OnInit {
     });
   }
 
-  save():void{
+  save(monform: NgForm):void{
+    console.log(monform);
+    //monform.control.
     this.todoService.save(this.editedTodo).then(t=> this.router.navigateByUrl('/liste')).catch(err=> console.error(err));
   }
 }
