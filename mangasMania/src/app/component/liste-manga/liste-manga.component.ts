@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Manga } from '../../metier/mangas';
 import { MangaRepositorieService } from '../../service/manga-repositorie.service';
@@ -11,7 +11,8 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './liste-manga.component.html',
   styleUrls: ['./liste-manga.component.css']
 })
-export class ListeMangaComponent implements OnInit {
+export class ListeMangaComponent implements OnInit, OnDestroy {
+  
 
   public mangas: Subject<Manga[]>;
   public mangaSubscription: Subscription;
@@ -33,6 +34,10 @@ export class ListeMangaComponent implements OnInit {
      //this.mangas = this.mangaRepositorie.listeMangas();
      // je demande au service de rafraichier la liste a partr du back end
      this.mangaRepositorie.refreshListe();
+  }
+
+  ngOnDestroy(): void {
+    this.mangaSubscription.unsubscribe();
   }
 
   deleteManga(id:number):void{
