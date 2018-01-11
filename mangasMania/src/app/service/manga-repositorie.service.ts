@@ -3,23 +3,39 @@ import { Manga } from '../metier/mangas';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Pageable } from '../metier/pageable';
 
 @Injectable()
 export class MangaRepositorieService {
 
-  private mangasSubject: BehaviorSubject<Manga[]>;
+  private basUrl: string = "http://localhost:8080/mangasMania"
+  private mangasSubject: BehaviorSubject<Pageable<Manga>>;
   private searchTerm: string; // recherche sur le titre
+
+  private noPage:number;
+
+  private filterByRatingMin: number;
 
   constructor(private _http: HttpClient) {
     // this.mangas = [new Manga(1,"angular contre attaque", "linus", new Date(), "aventure", 4),
     //     new Manga(2,"la chute de jsf", "carmack", new Date(), "horreur", 1),
     //     new Manga(3,"casablance 2", "ali baba", new Date(), "comedie", 5),
     //     new Manga(4,"coboliste le survivant", "bill", new Date(), "histoire", 4)];
-    this.mangasSubject = new BehaviorSubject([]);
+    this.mangasSubject = new BehaviorSubject(new Pageable([], 0,0,5,0,1,true, false, null));
     this.searchTerm = "";
+    this.noPage = 0; // par défaut au lancement
+    this.filterByRatingMin = 0;
   }
 
+  public setFilterByRatingMin(rating: number):void{
+    this.filterByRatingMin = rating;
+    this.refreshListe();
+  }
+  setNoPage(no:number):void{
+    this.noPage = no;
+    this.refreshListe();
+  }
   // meth appele si un composant veux modifer la liste des mangas
   public changeSearch(elt:string):void{
     this.searchTerm = elt;
@@ -29,26 +45,37 @@ export class MangaRepositorieService {
 
   public refreshListe():void{
     // quand on veut refresh la liste , 
-    let url = "http://localhost:8080/mangasMania/mangas";
+    let url = `${this.basUrl}/pmangas`;
     if (this.searchTerm != "" ){
       url += `/search/${this.searchTerm}`; 
     }
-    this._http.get<Manga[]>(url)
+
+    // attention urlparams tuple type immuable
+    // cet objet permet de déleguer a angular la construction de l url apres le  ? autrmeent dit la gestion des query paramters
+    let params: HttpParams = new HttpParams();
+    //console.log(this.noPage)
+    params = params.set("page",  this.noPage.toString());
+    console.log(params)
+    if (this.filterByRatingMin > 0){
+      params = params.set('ratingMin',''+ this.filterByRatingMin);
+    }
+    //url += `?page=${this.noPage}`;
+    this._http.get<Pageable<Manga>>(url, {params: params})
       .toPromise()
       .then(mangas => this.mangasSubject.next(mangas));
   }
 
-  public listeMangas(): Observable<Manga[]>{
+  public listeMangas(): Observable<Pageable<Manga>>{
     return this.mangasSubject.asObservable();
     //freturn this.mangasSubject.asObservable();
   }
 
   public findById(id: number): Promise<Manga>{
-    let url = `http://localhost:8080/mangasMania/mangas/${id}`;
+    let url = `${this.basUrl}/mangas/${id}`;
     return this._http.get<Manga>(url).toPromise();
   }
   public save(m: Manga):Promise<Manga>{
-    let url = "http://localhost:8080/mangasMania/mangas";
+    let url = `${this.basUrl}/mangas`;
     let option ={
       headers: new HttpHeaders({"Content-Type":"application/json"})
     }
@@ -62,7 +89,7 @@ export class MangaRepositorieService {
   }
 
   public delete(id: number): Promise<Manga>{
-    let url = `http://localhost:8080/mangasMania/mangas/${id}`;
+    let url = `${this.basUrl}/mangas/${id}`;
     return this._http.delete<Manga>(url).toPromise();
   }
 

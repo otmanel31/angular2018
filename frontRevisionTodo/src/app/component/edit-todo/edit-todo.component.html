@@ -1,10 +1,10 @@
 <div class="container">
   <div class="well">
     <h3>Formulaire {{typeFormulaire}} </h3>
-    <form (ngSubmit)="save()">
+    <form novalidate #monform="ngForm" (ngSubmit)="save(monform)">
       <div class="form-group">
         <label for='libelle'>libelle: </label>
-        <input type="text" id="libelle" name="libelle" class="form-control" [(ngModel)]="editedTodo.libelle"/>
+        <input type="text" id="libelle" name="libelle" class="form-control" [(ngModel)]="editedTodo.libelle" minlength="3" maxlength="50"/>
       </div>
   
       <div class="form-group">
@@ -14,7 +14,7 @@
   
       <div class="form-group">
         <label for='priorite'>priorite</label>
-        <input type="text" id="priorite" name="priorite" class="form-control" [(ngModel)]="editedTodo.priorite"/>
+        <input type="text" id="priorite" name="priorite" class="form-control" [(ngModel)]="editedTodo.priorite" pattern="^[0-5]$"/>
       </div>
   
       <div class="form-group">
@@ -24,18 +24,18 @@
 
       <div class="form-group">
         <label for='dateLimite'>date limite </label>
-        <input type="text" id="dateLimite" name="dateLimite" class="form-control" [ngModel]="editedTodo.dateLimite | date:'yyyy-MM-dd'" (ngModelChange)="editedTodo.dateLimite = $event" />
+        <input type="text" id="dateLimite" name="dateLimite" class="form-control" [ngModel]="editedTodo.dateLimite | date:'yyyy-MM-dd'" (ngModelChange)="editedTodo.dateLimite = $event"  />
       </div>
 
       <div class="form-group">
         <label for='contexte'>contexte</label>
-        <input type="text" id="contexte" name="contexte" class="form-control" [(ngModel)]="editedTodo.contexte"/>
+        <input type="text" id="contexte" name="contexte" class="form-control" [(ngModel)]="editedTodo.contexte" required/>
       </div>
       <div class="form-group">
         <label for='finished'>finished</label>
         <input type="text" id="finished" name="finished" class="form-control" [(ngModel)]="editedTodo.finished"/>
       </div>
-      <input type="submit" value="{{nameBtn}}" class="btn btn-primary"/>
+      <input [disabled]="monform.invalid" type="submit" value="{{nameBtn}}" class="btn btn-primary"/>
     </form>
   </div>
   

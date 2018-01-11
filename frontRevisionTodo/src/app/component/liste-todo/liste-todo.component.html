@@ -5,6 +5,9 @@
     <tab heading="priorite"><input type="text" class="form-control" id="priorite" name="priorite" [ngModel]="searchTerm" (ngModelChange)="search($event, 'priorite')" placeholder="Recherche par priorité"/></tab>
     <tab heading="date limite"><input type="text" class="form-control" id="dateLimite" name="dateLimite" [ngModel]="searchTerm" (ngModelChange)="search($event, 'dateLimite')" placeholder="Recherche par date limite"/></tab>
   </tabset>
+  <pagination [boundaryLinks]="true" [totalItems]="totalItems" [ngModel]="currentPage" [itemsPerPage]="3" class="pagination-sm"
+      previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" (pageChanged)="pageChanged($event)">
+  </pagination>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -29,8 +32,8 @@
         <td>{{t.contexte}}</td>
         <td>{{t.finished}}</td>
         <td>
-          <a class="btn btn-success" routerLink='/edit/{{t.id}}'>Editer</a>
-          <button class="btn btn-danger" (click)="deleteTodo(t.id)" >Supprimer</button>
+          <a class="btn btn-xs btn-success" routerLink='/edit/{{t.id}}'><span class="glyphicon glyphicon-pencil"></span></a>
+          <button class="btn btn-xs btn-danger" (click)="deleteTodo(t.id)" ><span class="glyphicon glyphicon-remove"></span></button>
         </td>
       </tr>
     </tbody>

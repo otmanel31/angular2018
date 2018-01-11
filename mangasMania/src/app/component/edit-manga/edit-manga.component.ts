@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Manga } from '../../metier/mangas';
 import { MangaRepositorieService } from '../../service/manga-repositorie.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-manga',
@@ -13,11 +14,11 @@ export class EditMangaComponent implements OnInit {
   private editedManga: Manga;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private mangaRepo: MangaRepositorieService){
-    this.editedManga = new Manga(0,"ubunchu", "linus", new Date, "informatique", 4);
+    this.editedManga = new Manga(0,"", "linus", new Date, "informatique", 4);
   }
 
   ngOnInit() {
-    this.editedManga = new Manga(0,"ubunchu", "linus", new Date, "informatique", 4);
+    this.editedManga = new Manga(0,"", "linus", new Date, "informatique", 4);
     let id;
     this.activatedRoute.params.subscribe(param=>{
       console.log(param)
@@ -28,8 +29,10 @@ export class EditMangaComponent implements OnInit {
     });
   }
 
-  save():void{
+  save(monForm: NgForm):void{
     console.log('in save meth');
+    console.log("validité du form=> " + monForm.valid);
+    console.log("form modifié => " + monForm.dirty);
     console.log(this.editedManga);
     this.mangaRepo.save(this.editedManga)
       .then(m=>this.router.navigateByUrl('/liste'))
