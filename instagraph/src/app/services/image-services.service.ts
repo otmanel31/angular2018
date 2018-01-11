@@ -57,4 +57,16 @@ export class ImageServicesService {
     this.noPage = noPage;
     this.refreshListe();
   }
+
+  //public delete(ids:number[]):Promise<Map<string, number>>{
+  public delete(ids:number[]):void{
+    let id: string = ids.join(",");
+    let urlParams = new HttpParams()
+    urlParams = urlParams.set('imgsId', id);
+
+    this.http.delete(`${this.basUrlExtendedApi}/delete`, {params:urlParams})
+      .toPromise()
+      .then(result=> this.refreshListe())
+      .catch(err=> console.error(err));
+  }
 }

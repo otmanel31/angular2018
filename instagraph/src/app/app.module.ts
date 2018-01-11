@@ -6,6 +6,7 @@ import { RouterModule } from "@angular/router";
 
 import { PaginationModule } from "ngx-bootstrap";
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './component/navbar/navbar.component';
@@ -16,6 +17,11 @@ import { ImageServicesService } from './services/image-services.service';
 import { FileUploadModule } from "ng2-file-upload";
 import { ImageUploadComponent } from './component/image-upload/image-upload.component';
 
+import { LightboxModule } from 'angular2-lightbox';
+
+
+import { NgMathPipesModule, NgStringPipesModule } from 'angular-pipes';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +31,7 @@ import { ImageUploadComponent } from './component/image-upload/image-upload.comp
     ImageUploadComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule,FormsModule,
+    BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
     PaginationModule.forRoot(), FileUploadModule,ProgressbarModule.forRoot(),
     RouterModule.forRoot([
       {path:"liste", component: ImageListComponent},
