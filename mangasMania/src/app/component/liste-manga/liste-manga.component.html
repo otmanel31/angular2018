@@ -9,6 +9,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>Image</th>
         <th>Titre</th>
         <th>Auteur</th>
         <th>date de parution</th>
@@ -19,6 +20,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let manga of mangas | async">
+        <td>
+          <img *ngIf="manga.img != null" [src]="getImgThumbUrl(manga.img?.id)" alt="{{manga.img?.fileName}}" (click)="openGallery(manga.img)"/>
+        </td>
         <td>{{manga.titre}}</td>
         <td>{{manga.auteur}}</td>
         <td>{{manga.dateParution | date}}</td>

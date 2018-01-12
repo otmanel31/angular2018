@@ -4,6 +4,7 @@ import { Manga } from '../../metier/mangas';
 import { MangaRepositorieService } from '../../service/manga-repositorie.service';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import { Image } from '../../metier/image';
 
 
 @Component({
@@ -53,5 +54,19 @@ export class ListeMangaComponent implements OnInit, OnDestroy {
   pageChanged(evt):void{
     console.log(evt);
     this.mangaRepositorie.setNoPage(evt.page - 1);  // moins 1 pour le back
+  }
+
+  getImgThumbUrl(id: number): string{
+    console.log(id)
+    if(id === null) return
+    else return this.mangaRepositorie.getImgThumbUrl(id);
+  }
+
+  getImgUrl(id: number): string{
+    return this.mangaRepositorie.getImgUrl(id);
+  }
+
+  openGallery(img: Image):void{
+    console.log(img);
   }
 }

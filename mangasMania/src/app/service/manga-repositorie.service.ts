@@ -10,12 +10,15 @@ import { Pageable } from '../metier/pageable';
 export class MangaRepositorieService {
 
   private basUrl: string = "http://localhost:8080/mangasMania"
+  private baseExtendedUrl: string = "http://localhost:8080/extended_api"
   private mangasSubject: BehaviorSubject<Pageable<Manga>>;
   private searchTerm: string; // recherche sur le titre
 
   private noPage:number;
 
   private filterByRatingMin: number;
+
+  private idMangas4Upload: number;
 
   constructor(private _http: HttpClient) {
     // this.mangas = [new Manga(1,"angular contre attaque", "linus", new Date(), "aventure", 4),
@@ -45,7 +48,7 @@ export class MangaRepositorieService {
 
   public refreshListe():void{
     // quand on veut refresh la liste , 
-    let url = `${this.basUrl}/pmangas`;
+    let url = `${this.baseExtendedUrl}/pmangas`;
     if (this.searchTerm != "" ){
       url += `/search/${this.searchTerm}`; 
     }
@@ -71,11 +74,11 @@ export class MangaRepositorieService {
   }
 
   public findById(id: number): Promise<Manga>{
-    let url = `${this.basUrl}/mangas/${id}`;
+    let url = `${this.baseExtendedUrl}/mangas/${id}`;
     return this._http.get<Manga>(url).toPromise();
   }
   public save(m: Manga):Promise<Manga>{
-    let url = `${this.basUrl}/mangas`;
+    let url = `${this.baseExtendedUrl}/mangas`;
     let option ={
       headers: new HttpHeaders({"Content-Type":"application/json"})
     }
@@ -89,8 +92,21 @@ export class MangaRepositorieService {
   }
 
   public delete(id: number): Promise<Manga>{
-    let url = `${this.basUrl}/mangas/${id}`;
+    let url = `${this.baseExtendedUrl}/mangas/${id}`;
     return this._http.delete<Manga>(url).toPromise();
   }
 
+  getImgThumbUrl(id:number):string{
+    return `${this.baseExtendedUrl}/downloadThumb/${id}`;
+  }
+  public getImgUrl(id:number):string{
+    return `${this.baseExtendedUrl}/download/${id}`;
+  }
+  public getUploadUrl():string{
+    return `${this.baseExtendedUrl}/image/upload/${this.idMangas4Upload}`;
+  }
+
+  public setIdManga4Upload(id: number):void{
+    this.idMangas4Upload = id;
+  }
 }
