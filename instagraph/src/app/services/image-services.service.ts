@@ -32,7 +32,7 @@ export class ImageServicesService {
     let params: HttpParams = new HttpParams();
     params = params.set('page', ""+this.noPage);
 
-    this.http.get<Page<Image>>(`${this.basUrlExtendedApi}/plistesByTags`, {params: params})
+    this.http.get<Page<Image>>(`${this.basUrlExtendedApi}/plistesByTagsFull`, {params: params})
       .toPromise()
       .then(page=>this.imgSubject.next(page));
   }
@@ -69,4 +69,7 @@ export class ImageServicesService {
       .then(result=> this.refreshListe())
       .catch(err=> console.error(err));
   }
+
+  
+
 }

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { TagRepositoryService } from "../../services/tag-repository.service";
+import { Subject } from 'rxjs/Subject';
+import { Tag } from '../../metier/tags';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-tag-selector',
@@ -7,9 +11,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TagSelectorComponent implements OnInit {
 
-  constructor() { }
+  public tagSubject: Subject<Tag[]>;
+  public tagSubscription: Subscription;
 
-  ngOnInit() {
+  constructor(private tageRepo: TagRepositoryService) {
+
+  }
+
+  ngOnInit( ) {
+    this.tagSubject = new Subject<Tag[]>();
+    this.tagSubscription = this.tageRepo.listeTagAsObservable()
+      .subscribe(page=>{
+        this.tagSubject.next(page.content)
+      });
+    this.tageRepo.refreshListe()
   }
 
 }

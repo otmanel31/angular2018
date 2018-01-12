@@ -100,4 +100,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
     let position = this.galleryLinks.findIndex(imgLink=> imgLink.id==img.id);
     this.lightBox.open(this.galleryLinks, position, {fadeDuration: 0.3, resizeDuration:0.3, showImageNumberLabel:true});
   }
+
+  public getImagePopOvertext(image: Image):string{
+    if (image.tags == null || image.tags.length == 0){
+      return "aucun tags";
+    }
+    else {
+      return "tags: " + image.tags.map(t => t.libelle).join(',');
+    }
+  }
 }

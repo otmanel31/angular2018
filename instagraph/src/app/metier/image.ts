@@ -1,3 +1,5 @@
+import { Tag } from "./tags";
+
 export class Image{
     constructor(
         public id: number, 
@@ -8,5 +10,7 @@ export class Image{
         public contentType:string, 
         public fileSize: number, 
         public width: number, 
-        public height: number){};
+        public height: number,
+        public tags?: Tag[]
+    ){};
 }
