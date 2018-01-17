@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule} from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
@@ -25,6 +25,9 @@ import { PopoverModule } from "ngx-bootstrap/";
 
 
 import { NgMathPipesModule, NgStringPipesModule } from 'angular-pipes';
+import { AuthManagerService } from './services/auth-manager.service';
+import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { LoginComponent } from './component/login/login.component';
 
 @NgModule({
   declarations: [
@@ -32,18 +35,26 @@ import { NgMathPipesModule, NgStringPipesModule } from 'angular-pipes';
     NavbarComponent,
     ImageListComponent,
     TagSelectorComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
     PaginationModule.forRoot(), FileUploadModule,ProgressbarModule.forRoot(), PopoverModule.forRoot(),
     RouterModule.forRoot([
       {path:"liste", component: ImageListComponent},
-      {path:"", redirectTo:"/liste",pathMatch:"full"},
+      {path:"", redirectTo:"/login",pathMatch:"full"},
+      {path:"login", component: LoginComponent},
       {path:"upload", component: ImageUploadComponent},
     ])
   ],
-  providers: [ImageServicesService, TagRepositoryService],
+  providers: [ImageServicesService, TagRepositoryService,
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:AuthInterceptorService,
+      multi:true
+    },
+    AuthManagerService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
