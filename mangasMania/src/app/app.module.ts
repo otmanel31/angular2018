@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule} from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
@@ -14,7 +14,15 @@ import { EditMangaComponent } from './component/edit-manga/edit-manga.component'
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ImageUploadComponent } from './component/image-upload/image-upload.component';
-import { PopoverModule } from "ngx-bootstrap/";
+import { PopoverModule, ProgressbarModule } from "ngx-bootstrap/";
+import { LoginComponent } from './component/login/login.component';
+import { UserInfoComponent } from './component/user-info/user-info.component';
+import { AuthManagerService } from './service/auth-manager.service';
+import { AuthInterceptorService } from './service/auth-interceptor.service';
+import { FileUploadModule } from 'ng2-file-upload';
+import { LightboxModule } from "angular2-lightbox";
+import { NgStringPipesModule, NgMathPipesModule } from "angular-pipes";
+import { NavbarComponent } from './component/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -22,17 +30,32 @@ import { PopoverModule } from "ngx-bootstrap/";
     SearchMangaComponent,
     ListeMangaComponent,
     EditMangaComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    LoginComponent,
+    UserInfoComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, PaginationModule.forRoot(),BsDropdownModule.forRoot(), PopoverModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    FileUploadModule,
+    LightboxModule,
+    NgStringPipesModule,
+    NgMathPipesModule,
     RouterModule.forRoot([
       {path:'liste', component:ListeMangaComponent},
       {path:"edit/:id", component:EditMangaComponent},
+      {path:"login", component:LoginComponent},
       {path:'', redirectTo:"liste", pathMatch:'full'}
     ])
   ],
-  providers: [MangaRepositorieService],
+  providers: [MangaRepositorieService,
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:AuthInterceptorService,
+      multi:true
+    },
+    AuthManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
