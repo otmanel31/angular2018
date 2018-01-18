@@ -33,7 +33,9 @@ export class TagRepositoryService {
 
     this.http.get<Page<Tag>>(`${this.basUrlExtendedApi}/pliste`, {params: params})
       .toPromise()
-      .then(page=>this.tagSubject.next(page));
+      .then(page=>this.tagSubject.next(page))
+      .catch(err => console.error(err))
+      ;
   }
 
   public listeTagAsObservable():Observable<Page<Tag>>{

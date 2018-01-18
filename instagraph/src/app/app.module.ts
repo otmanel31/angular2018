@@ -28,6 +28,7 @@ import { NgMathPipesModule, NgStringPipesModule } from 'angular-pipes';
 import { AuthManagerService } from './services/auth-manager.service';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { LoginComponent } from './component/login/login.component';
+import { UserInfoComponent } from './component/user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoginComponent } from './component/login/login.component';
     ImageListComponent,
     TagSelectorComponent,
     ImageUploadComponent,
-    LoginComponent
+    LoginComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,

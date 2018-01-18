@@ -10,11 +10,13 @@ export class AuthManagerService {
   private url:string = "http://localhost:8080/extended_api/auth";
 
   private currentUser: User;
-  private userSubject: Subject<User>;
+  private userSubject: Subject<[boolean,User]>;
+
+  private
 
   constructor(/*private http: HttpClient*/) {
     this.currentUser = null;
-    this.userSubject = new Subject<User>();
+    this.userSubject = new Subject<[boolean,User]>();
   }
 
   public getCurrentUser(): User{
@@ -37,7 +39,7 @@ export class AuthManagerService {
                 });*/
   }
 
-  public getUserAsObservable():Observable<User>{
+  public getUserAsObservable():Observable<[boolean,User]>{
     return this.userSubject.asObservable();
   }
 
@@ -49,6 +51,14 @@ export class AuthManagerService {
 
   setCurrentUser( u: User ):void{
     this.currentUser = u;
+    // publication du nouveau user loggué
+    this.userSubject.next([true, this.currentUser]);
+  }
+
+  public logOut():void {
+    this.currentUser = null;
+    // publication du fait quil ny a plus de user loggué
+    this.userSubject.next([false, null]);
   }
 
 }

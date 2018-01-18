@@ -68,7 +68,13 @@ export class ImageServicesService {
     }
     this.http.get<Page<Image>>(`${this.basUrlExtendedApi}/plistesByTagsFull`, {params: params})
       .toPromise()
-      .then(page=>this.imgSubject.next(page));
+      .then(page=>this.imgSubject.next(page))
+      .catch(err => {
+
+        console.log("error =>  ... ")
+        console.error(err)
+      })
+      ;
   }
 
   public listeImgAsObservable():Observable<Page<Image>>{
