@@ -88,8 +88,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   
   public canDelete():boolean{
-    return true;
-    return this.authManager.isRoleActive("ROLE_ADMIN");
+    //return true;
+    return this.authManager.isRoleActive("ROLE_ADMIN") || this.authManager.isRoleActive("ROLE_USER");
   }
 
   public confirmDelete():void{

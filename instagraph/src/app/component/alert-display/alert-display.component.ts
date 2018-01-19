@@ -17,7 +17,7 @@ export class AlertDisplayComponent implements OnInit {
       this.alerts.push({
         type : alert[0],
         message: alert[1],
-        timeout: 5000
+        timeout: 7000
       });
     })
   }
