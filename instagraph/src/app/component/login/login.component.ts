@@ -33,10 +33,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   tryLogin():void{
     console.log("in try login meth with " + this.user.username + " " + this.user.password);
     //this.authService.logMeIn(this.user.username, this.user.password);
-    let newUser = new User(this.user.username, this.user.password);
+    let newUser = new User(this.user.username, this.user.password, true);
     this.authService.setCurrentUser(newUser);
     this.http.post<User>(`${this.url}/login`, newUser)
                 .subscribe(u=>{
+                  newUser.roles = u.roles
                   console.log('je syuis bien logguer  avc ' + u.username);
                   this.router.navigateByUrl('/liste');
                 });

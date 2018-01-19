@@ -14,6 +14,8 @@ import { Lightbox } from 'angular2-lightbox/lightbox.service';
 
 import { TruncatePipe } from 'angular-pipes/src/string/truncate.pipe';
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+import { AuthManagerService } from '../../services/auth-manager.service';
+import { AlertManagerService } from '../../services/alert-manager.service';
 
 @Component({
   selector: 'app-image-list',
@@ -35,8 +37,8 @@ export class ImageListComponent implements OnInit, OnDestroy {
   public galleryLinks: any[];
 
   constructor(private imgRepo: ImageServicesService, 
-    private modalService: BsModalService, private lightBox: Lightbox) {
-
+    private modalService: BsModalService, private lightBox: Lightbox, 
+    private authManager: AuthManagerService, private alertManager: AlertManagerService) {
   }
 
   ngOnInit() {
@@ -56,7 +58,9 @@ export class ImageListComponent implements OnInit, OnDestroy {
         this.imgs.next(p.content)
         this.totalItems = p.totalElements;
         this.currentPage = p.number + 1;
-      });
+      })/*, err=>{ plus besoin gerer ds le service
+        this.alertManager.handleErrorResponse(err);
+      });*/ // possiblite de .catch derriere si on lajoute via rxjs
     this.imgRepo.refreshListe();
   }
 
@@ -80,6 +84,12 @@ export class ImageListComponent implements OnInit, OnDestroy {
     console.log(id);
     this.idToDelete = id;
     this.modalRef = this.modalService.show(deleteTemplate);
+  }
+
+  
+  public canDelete():boolean{
+    return true;
+    return this.authManager.isRoleActive("ROLE_ADMIN");
   }
 
   public confirmDelete():void{

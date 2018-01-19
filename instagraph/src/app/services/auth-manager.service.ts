@@ -12,7 +12,7 @@ export class AuthManagerService {
   private currentUser: User;
   private userSubject: Subject<[boolean,User]>;
 
-  private
+  //private
 
   constructor(/*private http: HttpClient*/) {
     this.currentUser = null;
@@ -21,6 +21,11 @@ export class AuthManagerService {
 
   public getCurrentUser(): User{
     return this.currentUser;
+  }
+  public isRoleActive(roleName: string):boolean{
+    if (this.currentUser == null || this.currentUser.roles == null) return false;
+    if (this.currentUser.roles.findIndex(r=> r.name == roleName) != -1) return true;
+    else return false;
   }
 
   public isLoggedIn():boolean{

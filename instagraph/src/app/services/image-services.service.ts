@@ -9,6 +9,7 @@ import { Page }        from '../metier/pageable';
 import { Image }           from "../metier/image";
 import { Tag } from '../metier/tags';
 import { Subject } from 'rxjs/Subject';
+import { AlertManagerService } from './alert-manager.service';
 
 
 @Injectable()
@@ -25,7 +26,7 @@ export class ImageServicesService {
   private selectedTags: Tag[];
   private selectedTagsSubject: BehaviorSubject<Tag[]>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private alertManager: AlertManagerService) {
     // init imgs
     this.noPage = 0;
     this.pageSize = 12;
@@ -69,10 +70,13 @@ export class ImageServicesService {
     this.http.get<Page<Image>>(`${this.basUrlExtendedApi}/plistesByTagsFull`, {params: params})
       .toPromise()
       .then(page=>this.imgSubject.next(page))
-      .catch(err => {
+      /*.catch(err => {
 
-        console.log("error =>  ... ")
+        console.log("error => in image service ... ")
         console.error(err)
+      })*/
+      .catch(err => {
+        this.alertManager.handleErrorResponse(err);
       })
       ;
   }
@@ -106,8 +110,13 @@ export class ImageServicesService {
 
     this.http.delete(`${this.basUrlExtendedApi}/delete`, {params:urlParams})
       .toPromise()
-      .then(result=> this.refreshListe())
-      .catch(err=> console.error(err));
+      .then(result=> {
+        this.alertManager.handleSuccessResponse("success", "image succesfulyy deleted");
+        this.refreshListe();
+      }, err=>{
+        this.alertManager.handleErrorResponse(err); // varuiante de catch
+      })
+      //.catch(err=> console.error(err));
   }
 
   

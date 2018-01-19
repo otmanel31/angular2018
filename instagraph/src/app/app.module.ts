@@ -22,6 +22,7 @@ import { ImageUploadComponent } from './component/image-upload/image-upload.comp
 
 import { LightboxModule } from 'angular2-lightbox';
 import { PopoverModule } from "ngx-bootstrap/";
+import { AlertModule } from "ngx-bootstrap";
 
 
 import { NgMathPipesModule, NgStringPipesModule } from 'angular-pipes';
@@ -29,6 +30,9 @@ import { AuthManagerService } from './services/auth-manager.service';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { LoginComponent } from './component/login/login.component';
 import { UserInfoComponent } from './component/user-info/user-info.component';
+import { RegisterUserComponent } from './component/register-user/register-user.component';
+import { AlertManagerService } from './services/alert-manager.service';
+import { AlertDisplayComponent } from './component/alert-display/alert-display.component';
 
 @NgModule({
   declarations: [
@@ -38,19 +42,23 @@ import { UserInfoComponent } from './component/user-info/user-info.component';
     TagSelectorComponent,
     ImageUploadComponent,
     LoginComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    RegisterUserComponent,
+    AlertDisplayComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
     PaginationModule.forRoot(), FileUploadModule,ProgressbarModule.forRoot(), PopoverModule.forRoot(),
+    AlertModule.forRoot(),
     RouterModule.forRoot([
       {path:"liste", component: ImageListComponent},
       {path:"", redirectTo:"/login",pathMatch:"full"},
       {path:"login", component: LoginComponent},
+      {path:"register", component: RegisterUserComponent},
       {path:"upload", component: ImageUploadComponent},
     ])
   ],
-  providers: [ImageServicesService, TagRepositoryService,
+  providers: [ImageServicesService, TagRepositoryService, AlertManagerService,
     {
       provide:HTTP_INTERCEPTORS,
       useClass:AuthInterceptorService,
