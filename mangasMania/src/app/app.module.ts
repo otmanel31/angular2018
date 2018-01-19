@@ -23,6 +23,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { LightboxModule } from "angular2-lightbox";
 import { NgStringPipesModule, NgMathPipesModule } from "angular-pipes";
 import { NavbarComponent } from './component/navbar/navbar.component';
+import { SignUpComponent } from './component/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NavbarComponent } from './component/navbar/navbar.component';
     ImageUploadComponent,
     LoginComponent,
     UserInfoComponent,
-    NavbarComponent
+    NavbarComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule, PaginationModule.forRoot(),BsDropdownModule.forRoot(), PopoverModule.forRoot(),
@@ -46,6 +48,7 @@ import { NavbarComponent } from './component/navbar/navbar.component';
       {path:'liste', component:ListeMangaComponent},
       {path:"edit/:id", component:EditMangaComponent},
       {path:"login", component:LoginComponent},
+      {path:"signup", component:SignUpComponent},
       {path:'', redirectTo:"liste", pathMatch:'full'}
     ])
   ],

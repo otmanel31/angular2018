@@ -1,5 +1,5 @@
 <ul class="nav navbar-nav navbar-right">
-  <li> <a href="#"><span class="glyphicon glyphicon-log-in"></span> Sing Up</a></li>
+  <li> <a routerLink="/signup"><span class="glyphicon glyphicon-log-in"></span> Sign Up</a></li>
   <li *ngIf="!isLoggedIn"><a routerLink="/login"><span class="glyphicon glyphicon-user"></span>Login</a></li>
   <li *ngIf="isLoggedIn" ><a href="" (click)="logOut()" ><span class="glyphicon glyphicon-user"></span>logOut</a></li>
 </ul>
