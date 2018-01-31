@@ -18,7 +18,7 @@ import { AuthManagerService } from '../../services/auth-manager.service';
 import { AlertManagerService } from '../../services/alert-manager.service';
 import { Tag } from '../../metier/tags';
 import { IAlbum } from 'angular2-lightbox';
-import { link } from 'fs';
+//import { link } from 'fs';
 import { TagRepositoryService } from '../../services/tag-repository.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private imgs: Subject<Image[]>;
-
+// pagination
   totalItems: number = 0;
   currentPage:number = 1;
 

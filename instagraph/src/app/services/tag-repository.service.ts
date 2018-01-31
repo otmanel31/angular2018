@@ -37,7 +37,7 @@ export class TagRepositoryService {
   refreshListe():void{
 
     let params: HttpParams = new HttpParams();
-    params = params.set('page', ""+this.noPage);
+    params = params.set('page', ""+this.noPage).set("size", "10"); // ajout du size pou mise ne place de pagination et nn plsu par defaut
     // gestion de la recherche de tag
     if (this.searchTerm != "" && this.searchTerm != null){
       params  = params.set("search", this.searchTerm);

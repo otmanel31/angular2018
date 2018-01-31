@@ -1,4 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+// import simple aninamtion
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
@@ -35,6 +38,8 @@ import { AlertManagerService } from './services/alert-manager.service';
 import { AlertDisplayComponent } from './component/alert-display/alert-display.component';
 import { ImageEditComponent } from './component/image-edit/image-edit.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +54,7 @@ import { ImageEditComponent } from './component/image-edit/image-edit.component'
     ImageEditComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
+    BrowserModule, BrowserAnimationsModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
     PaginationModule.forRoot(), FileUploadModule,ProgressbarModule.forRoot(), PopoverModule.forRoot(),
     AlertModule.forRoot(),
     RouterModule.forRoot([

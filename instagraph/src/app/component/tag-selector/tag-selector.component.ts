@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+// import pour l'animation
+import { trigger, state, style, animate, transition } from "@angular/animations";
+
 import { TagRepositoryService } from "../../services/tag-repository.service";
 import { Subject } from 'rxjs/Subject';
 import { Tag } from '../../metier/tags';
@@ -9,11 +12,22 @@ import { log } from 'util';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { BsModalService } from 'ngx-bootstrap/modal/bs-modal.service';
 import { AlertManagerService } from '../../services/alert-manager.service';
+import { takeUntil } from 'angular-pipes/src/utils/utils';
+
+
 
 @Component({
   selector: 'app-tag-selector',
   templateUrl: './tag-selector.component.html',
-  styleUrls: ['./tag-selector.component.css']
+  styleUrls: ['./tag-selector.component.css'], 
+  animations :[
+    trigger('tagState', [
+      state('positive', style({backgroundColor: 'rgba(128, 255, 0, 0.911)'})),
+      state('negative', style({backgroundColor: 'rgba(255, 192, 203, 0.89)'})),
+      transition('negative => positive', animate("1000ms ease-in")),
+      transition('positive => negative', animate("2000ms ease-out"))
+    ])
+  ]
 })
 export class TagSelectorComponent implements OnInit {
 
@@ -49,6 +63,10 @@ export class TagSelectorComponent implements OnInit {
 
   modalRef: BsModalRef;
 
+  //pagination
+  public totalItems: number = 0;
+  public currentPage:number = 1;
+
   constructor(private tageRepo: TagRepositoryService, private imgRepo: ImageServicesService,
     private modalService: BsModalService, private alertManager: AlertManagerService
   ) {
@@ -60,10 +78,17 @@ export class TagSelectorComponent implements OnInit {
     this.tagSubject = new Subject<Tag[]>();
     this.searchSubject = new Subject<string>();
 
-    this.tagSubscription = this.tageRepo.listeTagAsObservable()
+    /*this.tagSubscription = this.tageRepo.listeTagAsObservable()
       .subscribe(page=>{
         this.tagSubject.next(page.content)
-      });
+    }); OLD WITHOUT PAGINATION OF TAGS*/
+    this.tagSubscription = this.tageRepo.listeTagAsObservable()
+      .subscribe(page=>{
+        this.tagSubject.next(page.content);
+        this.currentPage = page.number +1;
+        this.totalItems = page.totalElements;
+        console.log(this.totalItems + " => total items")
+    });
     this.tageRepo.refreshListe();
     this.tagsSelected = this.imgRepo.selectedTagsAsObservable();
 
@@ -105,7 +130,8 @@ export class TagSelectorComponent implements OnInit {
         this.alertManager.handleSuccessResponse("success", `tag ${tag.libelle} created`);
         this.searchTerm = "";
         this.tageRepo.setSearchTerm(this.searchTerm)
-        this.tageRepo.refreshListe();
+        this.tageRepo.refreshListe(); 
+        //this.searchSubject.next(this.searchTerm);
 
       })
       .catch(err=> this.alertManager.handleErrorResponse(err));
@@ -114,5 +140,13 @@ export class TagSelectorComponent implements OnInit {
   public toogleSelectedTag(tag: [boolean, Tag]):void{
     tag[0] = !tag[0];
     this.imgRepo.updateSelectedTag(tag);
+  }
+
+  public pageChanged(event: any):void{
+    this.tageRepo.setNoPage(event.page -1); // - 1 pour le serveur
+  }
+  public getTagState(tag: [boolean, Tag]): string{
+    if(tag[0]) return "positive";
+    else return "negative";
   }
 }
