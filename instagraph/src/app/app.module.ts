@@ -37,6 +37,7 @@ import { RegisterUserComponent } from './component/register-user/register-user.c
 import { AlertManagerService } from './services/alert-manager.service';
 import { AlertDisplayComponent } from './component/alert-display/alert-display.component';
 import { ImageEditComponent } from './component/image-edit/image-edit.component';
+import { TexturedCubeComponent } from './component/textured-cube/textured-cube.component';
 
 
 
@@ -51,7 +52,8 @@ import { ImageEditComponent } from './component/image-edit/image-edit.component'
     UserInfoComponent,
     RegisterUserComponent,
     AlertDisplayComponent,
-    ImageEditComponent
+    ImageEditComponent,
+    TexturedCubeComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
