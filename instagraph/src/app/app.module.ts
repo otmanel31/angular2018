@@ -33,6 +33,7 @@ import { UserInfoComponent } from './component/user-info/user-info.component';
 import { RegisterUserComponent } from './component/register-user/register-user.component';
 import { AlertManagerService } from './services/alert-manager.service';
 import { AlertDisplayComponent } from './component/alert-display/alert-display.component';
+import { ImageEditComponent } from './component/image-edit/image-edit.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AlertDisplayComponent } from './component/alert-display/alert-display.c
     LoginComponent,
     UserInfoComponent,
     RegisterUserComponent,
-    AlertDisplayComponent
+    AlertDisplayComponent,
+    ImageEditComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,FormsModule, ModalModule.forRoot(), LightboxModule,NgStringPipesModule,NgMathPipesModule,
@@ -52,10 +54,11 @@ import { AlertDisplayComponent } from './component/alert-display/alert-display.c
     AlertModule.forRoot(),
     RouterModule.forRoot([
       {path:"liste", component: ImageListComponent},
-      {path:"", redirectTo:"/login",pathMatch:"full"},
+      {path:"", redirectTo:"/liste",pathMatch:"full"},
       {path:"login", component: LoginComponent},
       {path:"register", component: RegisterUserComponent},
       {path:"upload", component: ImageUploadComponent},
+      {path:"image/edit/:id", component: ImageEditComponent}
     ])
   ],
   providers: [ImageServicesService, TagRepositoryService, AlertManagerService,

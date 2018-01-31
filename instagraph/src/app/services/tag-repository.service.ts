@@ -7,6 +7,7 @@ import { Observable }      from 'rxjs/Observable';
 import { Page }        from '../metier/pageable';
 import { Image }           from "../metier/image";
 import { Tag } from '../metier/tags';
+import { promise } from 'selenium-webdriver';
 
 
 @Injectable()
@@ -17,8 +18,10 @@ export class TagRepositoryService {
   private noPage  : number;
   private pageSize: number;
 
-  private basUrlApi:          string = "http://localhost:8080/api/tags"
-  private basUrlExtendedApi:  string = "http://localhost:8080/extended_api/tag"
+  private basUrlApi:          string = "http://localhost:8080/api/tags";
+  private basUrlExtendedApi:  string = "http://localhost:8080/extended_api/tag";
+
+  private searchTerm: string = "";
 
   constructor(private http: HttpClient) {
     this.noPage = 0;
@@ -26,12 +29,20 @@ export class TagRepositoryService {
     this.tagSubject = new BehaviorSubject(Page.emptyPage<Tag>());
   }
 
+  public setSearchTerm(searchTerm:string):void{
+    this.searchTerm = searchTerm;
+    this.refreshListe();
+  }
+
   refreshListe():void{
 
     let params: HttpParams = new HttpParams();
     params = params.set('page', ""+this.noPage);
-
-    this.http.get<Page<Tag>>(`${this.basUrlExtendedApi}/pliste`, {params: params})
+    // gestion de la recherche de tag
+    if (this.searchTerm != "" && this.searchTerm != null){
+      params  = params.set("search", this.searchTerm);
+    }
+    this.http.get<Page<Tag>>(`${this.basUrlExtendedApi}/liste`, {params: params})
       .toPromise()
       .then(page=>this.tagSubject.next(page))
       .catch(err => console.error(err))
@@ -45,5 +56,30 @@ export class TagRepositoryService {
   public setNoPage(noPage: number):void{
     this.noPage = noPage;
     this.refreshListe();
+  }
+
+  public addTags(tags: Tag[], imgs: Image[]):Promise<Tag[]>{
+    let contentsIds : string = imgs.map(img=> img.id).join(",");
+    let tagIds : string = tags.map(tag=>tag.id).join(",");
+    let url = `${this.basUrlExtendedApi}/addTags/${contentsIds}/${tagIds}`;
+
+    return this.http.post<Tag[]>(url,{}).toPromise();
+  }
+
+  public create(tag:Tag):Promise<Tag>{
+    return this.http.post<Tag>(`${this.basUrlApi}`, tag).toPromise(); 
+  }
+
+  public removeTags(tags: Tag[], imgs: Image[]):Promise<Tag[]>{
+    let contentsIds : string = imgs.map(img=> img.id).join(",");
+    let tagIds : string = tags.map(tag=>tag.id).join(",");
+    let url = `${this.basUrlExtendedApi}/removeTags/${contentsIds}/${tagIds}`;
+
+    return this.http.post<Tag[]>(url,{}).toPromise();
+  }
+
+  public getRelatedTags(contentId: number):Promise<Tag[]>{
+    let url:string = `${this.basUrlExtendedApi}/findRelated/${contentId}`; 
+    return this.http.get<Tag[]>(url).toPromise();
   }
 }

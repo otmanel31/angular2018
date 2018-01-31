@@ -16,6 +16,10 @@ import { TruncatePipe } from 'angular-pipes/src/string/truncate.pipe';
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { AuthManagerService } from '../../services/auth-manager.service';
 import { AlertManagerService } from '../../services/alert-manager.service';
+import { Tag } from '../../metier/tags';
+import { IAlbum } from 'angular2-lightbox';
+import { link } from 'fs';
+import { TagRepositoryService } from '../../services/tag-repository.service';
 
 @Component({
   selector: 'app-image-list',
@@ -36,18 +40,28 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   public galleryLinks: any[];
 
-  constructor(private imgRepo: ImageServicesService, 
+  public selectedImg: Image[];
+  public isDeleteAll: boolean = false;
+
+  public selectedImgAllCurrentPage: Image[];
+
+  public tag4PopUp: Tag;
+  
+  constructor(private imgRepo: ImageServicesService, private tagRepo:  TagRepositoryService,
     private modalService: BsModalService, private lightBox: Lightbox, 
     private authManager: AuthManagerService, private alertManager: AlertManagerService) {
   }
 
   ngOnInit() {
     this.imgs = new Subject();
+    this.selectedImgAllCurrentPage = [];
     this.subscription = this.imgRepo.listeImgAsObservable()
       .subscribe(p=>{
         // mettre a jours les liens pour lightbox 
         this.galleryLinks = [];
+        this.selectedImgAllCurrentPage = p.content;
         p.content.forEach(img=>{
+          //this.selectedImgAllCurrentPage.push(img);
           this.galleryLinks.push({
             id: img.id,
             src: this.getImgUrl(img.id),
@@ -62,6 +76,7 @@ export class ImageListComponent implements OnInit, OnDestroy {
         this.alertManager.handleErrorResponse(err);
       });*/ // possiblite de .catch derriere si on lajoute via rxjs
     this.imgRepo.refreshListe();
+    this.selectedImg = [];
   }
 
   ngOnDestroy(): void {
@@ -88,12 +103,16 @@ export class ImageListComponent implements OnInit, OnDestroy {
 
   
   public canDelete():boolean{
-    //return true;
-    return this.authManager.isRoleActive("ROLE_ADMIN") || this.authManager.isRoleActive("ROLE_USER");
+    return true;
+    //return this.authManager.isRoleActive("ROLE_ADMIN") || this.authManager.isRoleActive("ROLE_USER");
   }
 
   public confirmDelete():void{
-    this.imgRepo.delete([this.idToDelete]);
+    if (this.isDeleteAll) this.imgRepo.delete(this.selectedImg.map(img=>img.id));
+    else{
+      this.imgRepo.delete([this.idToDelete]);
+    }
+    this.isDeleteAll = false;
     this.modalRef.hide();
   }
   cancelDelete(){
@@ -118,5 +137,77 @@ export class ImageListComponent implements OnInit, OnDestroy {
     else {
       return "tags: " + image.tags.map(t => t.libelle).join(',');
     }
+  }
+
+  public selectedNewTag(tag: Tag):void{
+    // ici on dit o repo d'ajout un filtre
+    this.imgRepo.addSelectedTag(tag);
+  }
+
+  public unSelectedTag(tag: Tag):void{
+    this.imgRepo.removeSelectedTag(tag);
+  }
+
+  public isSelected(img: Image):boolean{
+    return this.selectedImg.findIndex(i=> i.id == img.id) != -1;
+  }
+
+  public toogleSelect(img:Image):void{
+    let index = this.selectedImg.findIndex(i=> i.id == img.id)
+    if (index == -1) this.selectedImg.push(img);
+    else this.selectedImg.splice(index,1);
+  }
+
+  public openSelectedGallery():void{
+    let links = [];
+    this.selectedImg.forEach(img=>{
+      links.push({id:img.id, src:this.imgRepo.getImgUrl(img.id), caption:img.fileName})
+    } )
+    this.lightBox.open( links, 0, {fadeDuration: 0.3, resizeDuration:0.3, showImageNumberLabel:true});
+  }
+
+  public reset():void{
+    this.selectedImg = [];
+  }
+
+  public deleteSelected( deleteTemplate: TemplateRef<any>):void{
+    this.isDeleteAll = true;
+    this.modalRef = this.modalService.show(deleteTemplate);
+    /*this.imgRepo.delete(this.selectedImg.map(img => img.id));
+    this.modalRef.hide();*/
+  }
+
+  public selectAll():void{
+    console.log('in select all')
+    // this.selectedImg = [];    this.selectedImg = this.selectedImgAllCurrentPage;
+    this.selectedImgAllCurrentPage.forEach(img=>{
+      if (this.selectedImg.findIndex(i=> i.id == img.id) != -1) return;
+      else this.selectedImg.push(img);
+    })
+
+  }
+
+  public addTagToSelected():void{
+    this.tagRepo.addTags([this.tag4PopUp], this.selectedImg)
+      .then(resp => {
+        this.imgRepo.refreshListe();
+        this.alertManager.handleSuccessResponse("success", "tag succesfully added")
+      })
+      .catch(err=> this.alertManager.handleErrorResponse(err)); 
+    this.modalRef.hide();
+  }
+
+  public removeTagToSelected():void{
+    this.tagRepo.removeTags([this.tag4PopUp], this.selectedImg)
+      .then(resp => {
+        this.imgRepo.refreshListe();
+        this.alertManager.handleSuccessResponse("success", "tag succesfully deleted")
+      })
+      .catch(err=> this.alertManager.handleErrorResponse(err));
+    this.modalRef.hide();
+  }
+  public addRemovTag(tag:Tag, addRemoveTemplate: TemplateRef<any>):void{
+    this.tag4PopUp = tag;
+    this.modalRef = this.modalService.show(addRemoveTemplate);
   }
 }
